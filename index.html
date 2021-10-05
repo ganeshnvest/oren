@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>home</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
+   <link href="assets/style.css" rel="stylesheet">
+</head>
+<body>
+   <div class="container">
+      <div class="row ">
+         <div class="col-lg-12">
+            <div id="userDetails" class="userDetails">   
+            </div>
+         </div>
+      </div>
+   </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   <script type="text/javascript">
+      $(document).ready(function(){
+         userList();
+      })
+      function userList(){
+
+         $.ajax({
+           type: "GET",
+           dataType: "json",
+           url: 'https://jsonplaceholder.typicode.com/users',
+           cache: false,
+           contentType: false,
+           processData: false,
+         }).done(function(jsonData){
+
+            var userListHTML = '';
+            if(jsonData != null && jsonData != ''){
+               if(Array.isArray(jsonData) && jsonData.length){
+
+                     jsonData.forEach(userData=>{
+
+                        var imageURL = 'https://avatars.dicebear.com/v2/avataaars/{{'+userData.username+'}}.svg'; 
+                        //var imageURL = 'https://avatars.dicebear.com/v2/avataaars/'+userData.username+'.svg';
+                        // console.log(userData.address['street']);
+                        userListHTML += '<div class="col-md-4">';
+                           userListHTML += '<div class="profile-card text-center">';
+                              userListHTML += '<img class="img-responsive" src="'+imageURL+'" class="card-img-top" alt="name">';
+                              userListHTML += '<div class="profile-info">';
+                                 userListHTML += '<h3 class="hvr-underline-from-center">'+userData.name+'</h3>';
+                                 userListHTML += '<i class="fa fa-envelope-o" style="font-size:17px;"> '+userData.email+'</i>';
+                                 userListHTML += '<i class="fa fa-phone" style="font-size:17px;"> '+userData.phone+'</i>';
+                                 userListHTML += '<i class="fa fa-dribbble" style="font-size:17px;"> '+userData.website+'</i>';
+								  userListHTML += '<i class="fa fa-home" style="font-size:17px;"> '+userData.address['street']+'</i>';
+								  <!-- userListHTML += '<i class="fa fa-home" style="font-size:17px;"> '+userData.company['name']+'</i>'; -->
+                                 userListHTML += '</br>';
+                                 userListHTML += '<a href="javascript:void(0)"><i class="fa fa-heart"></i></a>';
+                                 userListHTML += '<a href="javascript:void(0)"><i class="fa fa-edit"></i></a>';
+                                 userListHTML += '<a href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>';
+                              userListHTML += '</div>';
+                           userListHTML += '</div>';
+                        userListHTML += '</div>';
+                     });
+               }
+            }
+            // document.getElementById("userDetails").innerHTML = userListHTML;
+            $("#userDetails").html(userListHTML);
+
+         });
+      }
+   </script>
+</body>
+</html>
